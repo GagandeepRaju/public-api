@@ -1,4 +1,4 @@
-const url = "https://randomuser.me/api/?results=10";
+const url = "https://randomuser.me/api/?results=12";
 const xhr = new XMLHttpRequest();
 
 xhr.onreadystatechange = function () {
