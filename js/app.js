@@ -1,3 +1,7 @@
+/*
+    VARIABLES DELARATION AND SOME ELEMENT CAPTURED ONCE PAGE LOAD
+*/
+
 const gallery = document.querySelector("#gallery");
 
 const modContainer = document.createElement("div");
@@ -6,9 +10,13 @@ modContainer.style.display = "none";
 document.querySelector("body").append(modContainer);
 
 let res = "";
-
 let modalId = 0;
 
+/*
+    GALLERY CARD FUNCTION IS BEING CALLED WHENEVER THE PAGE REFRESH AND ALL THE RESULTS HAS BEEN RECEIVED
+    RESPONSE RESULTS BEING ACCESS ONE BY ONE AND DEEP DOWN EXTRACTING THE VALUES FROM IT ASSIGNING TO EACH
+    ELEMENTS
+*/
 function galleryCard(response) {
   let modalGal = "";
   res = response;
@@ -40,20 +48,36 @@ function galleryCard(response) {
   }
 }
 
+/* 
+    BUILD MODAL FOR MODAL ELEMENTS AND ALSO BEING CALLED WHEN THE MODAL NEXT OR PREV BUTTON IS CLICKED 
+    GLOBAL VARIBALES OF RESPONSE FROM API GET REQUEST IS BEING ACCESSED WITH INITIAL OBJECT#0 AND CHANGE IT BASED ON THE 
+    CLICK ON THE PROFILE BY PASSING ITS ID #
+*/
 function buildModal(id) {
   //
   modalId = id;
   let modal = `<div class="modal">
             <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
             <div class="modal-info-container">
-            <img class="modal-img" src=${res[modalId].picture.large} alt="profile picture">
-            <h3 id="name" class="modal-name cap">${res[modalId].name.first} ${res[modalId].name.last}</h3>
+            <img class="modal-img" src=${
+              res[modalId].picture.large
+            } alt="profile picture">
+            <h3 id="name" class="modal-name cap">${res[modalId].name.first} ${
+    res[modalId].name.last
+  }</h3>
             <p class="modal-text">${res[modalId].email}</p>
             <p class="modal-text cap">${res[modalId].location.city}</p>
             <hr>
             <p class="modal-text">${res[modalId].phone}</p>
-            <p class="modal-text">${res[modalId].location.street.number} ${res[modalId].location.street.name}., ${res[modalId].location.city}, ${res[modalId].location.state} ${res[modalId].location.postcode}</p>
-            <p class="modal-text">Birthday: ${res[modalId].dob.date}</p>
+            <p class="modal-text">${res[modalId].location.street.number} ${
+    res[modalId].location.street.name
+  }., ${res[modalId].location.city}, ${res[modalId].location.state} ${
+    res[modalId].location.postcode
+  }</p>
+            <p class="modal-text">Birthday: ${res[modalId].dob.date.slice(
+              0,
+              10
+            )}</p>
             </div>
             </div>
             <div class="modal-btn-container">
@@ -80,20 +104,21 @@ function buildModal(id) {
   });
 }
 
+//MODAL CONTAINER FOR TOGGLE VIEW BETWEEN MODAL CLOSE AND OPEN
 function modalContainer() {
   modContainer.style.display = "";
 }
 
+//PREV BUTTON FOR NEXT PROFILE CHANGE IN MODAL
 function prevModal() {
-  console.log(modalId);
   if (modalId >= 1) {
     modalId -= 1;
     buildModal(modalId);
   }
 }
 
+//NEXT BUTTON FOR NEXT PROFILE CHANGE IN MODAL
 function nextModal() {
-  console.log(modalId);
   if (modalId < 11) {
     modalId += 1;
     buildModal(modalId);
