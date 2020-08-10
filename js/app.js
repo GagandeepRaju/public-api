@@ -56,28 +56,20 @@ function galleryCard(response) {
 function buildModal(id) {
   //
   modalId = id;
+  const cell = formatCell(res[modalId].cell);
+  const dob = formatDob(res[modalId].dob.date.slice(0, 10));
+
   let modal = `<div class="modal">
             <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
             <div class="modal-info-container">
-            <img class="modal-img" src=${
-              res[modalId].picture.large
-            } alt="profile picture">
-            <h3 id="name" class="modal-name cap">${res[modalId].name.first} ${
-    res[modalId].name.last
-  }</h3>
+            <img class="modal-img" src=${res[modalId].picture.large} alt="profile picture">
+            <h3 id="name" class="modal-name cap">${res[modalId].name.first} ${res[modalId].name.last}</h3>
             <p class="modal-text">${res[modalId].email}</p>
             <p class="modal-text cap">${res[modalId].location.city}</p>
             <hr>
-            <p class="modal-text">${res[modalId].phone}</p>
-            <p class="modal-text">${res[modalId].location.street.number} ${
-    res[modalId].location.street.name
-  }., ${res[modalId].location.city}, ${res[modalId].location.state} ${
-    res[modalId].location.postcode
-  }</p>
-            <p class="modal-text">Birthday: ${res[modalId].dob.date.slice(
-              0,
-              10
-            )}</p>
+            <p class="modal-text">${cell}</p>
+            <p class="modal-text">${res[modalId].location.street.number} ${res[modalId].location.street.name}., ${res[modalId].location.city}, ${res[modalId].location.state} ${res[modalId].location.postcode}</p>
+            <p class="modal-text">Birthday: ${dob}</p>
             </div>
             </div>
             <div class="modal-btn-container">
@@ -123,4 +115,34 @@ function nextModal() {
     modalId += 1;
     buildModal(modalId);
   }
+}
+/*formatting cell number incoming format is different so pre check with define format if any otherwise replace format*/
+function formatCell(cell) {
+  const pattern = /(\w{3})(\w{3})(\w+)/;
+  let newCell = "";
+  const patternChk = /^\(\d{3}\)\.\d{3}\-\d{4}$/;
+  if (patternChk.test(cell)) {
+    return cell;
+  } else {
+    for (let i = 0; i < cell.length; i++) {
+      if (
+        cell[i] !== "-" &&
+        cell[i] !== "(" &&
+        cell[i] !== ")" &&
+        cell[i] !== " "
+      ) {
+        newCell += cell[i];
+      }
+    }
+    const formatCell = newCell.replace(pattern, `($1) $2-$3`);
+    return formatCell;
+  }
+}
+
+//pattern to be captures (\w+)\-(\w+)\-(\w+) coming format yyyy-mm-dd
+// return format MM/DD/YYYY
+function formatDob(dob) {
+  const pattern = /(\w+)\-(\w+)\-(\w+)/;
+  const newDob = dob.replace(pattern, `$2/$3/$1`);
+  return newDob;
 }
